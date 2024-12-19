@@ -2,10 +2,10 @@
 
 # (en:English)
 
-- [llvm\_mingw toolchain](./README.md)
+- [llvm-mingw toolchain](./llvm-mingw.md)
   - [UTF-8 codepage](utf8build.md)
 # (ja:日本語)
 
-- [llvm\_mingw toolchain](./README.ja.md)
+- [llvm-mingw toolchain](./llvm-mingw.ja.md)
   - [UTF-8 codepage](utf8build.ja.md)
 

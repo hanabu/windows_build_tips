@@ -2,7 +2,7 @@
 authors = ["Hanabusa Masahiro"]
 language = "ja"
 multilingual = false
-src = "."
+src = "src"
 title = "Windows build tips"
 
 [build]
