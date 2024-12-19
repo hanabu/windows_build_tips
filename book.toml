@@ -1,0 +1,17 @@
+[book]
+authors = ["Hanabusa Masahiro"]
+language = "ja"
+multilingual = false
+src = "."
+title = "Windows build tips"
+
+[build]
+build-dir = "docs"
+create-missing = false
+
+[rust]
+edition = "2021"
+
+[output.html]
+git-repository-url = "https://github.com/hanabu/windows_build_tips"
+git-repository-icon = "fa-github"
