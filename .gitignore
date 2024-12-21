@@ -2,6 +2,7 @@
 *.bak
 *.sav
 *.swp
+build
 /docs/
 /mdbook
 /mdbook.exe
