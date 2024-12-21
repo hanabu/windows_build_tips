@@ -1,14 +1,16 @@
-﻿// Application manifest for UTF-8 code page
+#pragma code_page(65001)
+
+// Application manifest for UTF-8 code page
 1 24 "utf8_manifest.xml"
 
 
 // Icon
-//2  ICON "hello.ico"
+//1 ICON "hello.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
 // Version
-3 VERSIONINFO
+1 VERSIONINFO
  FILEVERSION 0,1,0,0
  PRODUCTVERSION 0,1,0,0
  FILEFLAGSMASK 0x3fL
