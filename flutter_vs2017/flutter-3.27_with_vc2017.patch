@@ -1,0 +1,80 @@
+#
+# 以下のpatchを当てたうえで、flutter/bin/cache/{flutter_tools.snapshot,flutter_tools.stamp} を削除する
+# See also: https://github.com/flutter/flutter/issues/77638#issuecomment-799321398
+#
+# VS 2017 BuildTools
+#  Workload : Visual C++ Build Tools
+#  Components: Windows 10 SDK (10.0.17763.0) + VC++2017 version 15.9 v14.16 latest v141 tools
+#            + Visual C++ Build Tools のコア機能 + Visual Studio C++ コア機能 
+#
+# CMake >= 3
+#
+--- packages/flutter_tools/lib/src/windows/visual_studio.dart.orig	Fri Dec 13 20:45:12 2024
++++ packages/flutter_tools/lib/src/windows/visual_studio.dart	Fri Dec 13 20:48:02 2024
+@@ -151,28 +151,22 @@
+   ///
+   /// E.g., for Visual Studio 2019 this returns "2019" rather than "16".
+   String get minimumVersionDescription {
+-    return '2019';
++    return '2017';
+   }
+ 
+   /// The path to CMake, or null if no Visual Studio installation has
+   /// the components necessary to build.
+   String? get cmakePath {
+-    final VswhereDetails? details = _bestVisualStudioDetails;
+-    if (details == null || !details.isUsable || details.installationPath == null) {
+-      return null;
++    const String programFilesEnv = 'PROGRAMFILES';
++    if (!_platform.environment.containsKey(programFilesEnv)) {
++      throwToolExit('%$programFilesEnv% environment variable not found.');
+     }
+-
+-    return _fileSystem.path.joinAll(<String>[
+-      details.installationPath!,
+-      'Common7',
+-      'IDE',
+-      'CommonExtensions',
+-      'Microsoft',
+-      'CMake',
++	return _fileSystem.path.joinAll(<String>[
++	  _platform.environment[programFilesEnv]!,
+       'CMake',
+       'bin',
+       'cmake.exe',
+     ]);
+   }
+ 
+   /// The generator string to pass to CMake to select this Visual Studio
+@@ -180,6 +174,7 @@
+   String? get cmakeGenerator {
+     // From https://cmake.org/cmake/help/v3.22/manual/cmake-generators.7.html#visual-studio-generators
+     return switch (_majorVersion) {
++	  15 => 'Visual Studio 15 2017',
+       17 => 'Visual Studio 17 2022',
+       _  => 'Visual Studio 16 2019',
+     };
+@@ -287,6 +282,8 @@
+     // relevant for the most likely fresh install case).
+     String cppToolchainDescription;
+     switch (majorVersion ?? _majorVersion) {
++      case 15:
++        cppToolchainDescription = 'VC++ 2017 version 15.9 v14.16 latest v141 tools';
+       case 16:
+       default:
+         cppToolchainDescription = 'MSVC v142 - VS 2019 C++ x64/x86 build tools';
+@@ -302,13 +299,11 @@
+     return <String, String>{
+       // The C++ toolchain required by the template.
+       'Microsoft.VisualStudio.Component.VC.Tools.x86.x64': cppToolchainDescription,
+-      // CMake
+-      'Microsoft.VisualStudio.Component.VC.CMake.Project': 'C++ CMake tools for Windows',
+     };
+   }
+ 
+   /// The minimum supported major version.
+-  static const int _minimumSupportedVersion = 16;  // '16' is VS 2019.
++  static const int _minimumSupportedVersion = 15;  // '15' is VS 2017.
+ 
+   /// vswhere argument to specify the minimum version.
+   static const String _vswhereMinVersionArgument = '-version';
